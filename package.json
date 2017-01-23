@@ -1,0 +1,15 @@
+{
+  "name": "form.asyouareboudoir.com",
+  "version": "1.0.0",
+  "description": "A form for ingesting signatures online.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ricky Hussmann",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
