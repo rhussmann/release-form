@@ -21,7 +21,7 @@ router.post("/agree") {
         let name = formData["first-name"] ?? ""
         try response.send("Hello \(name)").end()
     default:
-        break
+        try response.redirect("/").end()
     }
     next()
 }

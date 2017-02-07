@@ -4,12 +4,16 @@
   "description": "A form for ingesting signatures online.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "bower install signature_pad && cp bower_components/signature_pad/signature_pad.min.js public/script/"
   },
   "author": "Ricky Hussmann",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "bower": "^1.8.0"
   }
 }

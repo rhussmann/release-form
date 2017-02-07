@@ -1,0 +1,21 @@
+{
+  "name": "form.asyouareboudoir.com",
+  "description": "A form for ingesting signatures online.",
+  "main": "server.js",
+  "authors": [
+    "Ricky Hussmann"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/rhussmann/release-form",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "signature_pad": "^1.5.3"
+  }
+}

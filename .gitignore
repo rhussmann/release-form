@@ -1,5 +1,9 @@
 Packages/
 logs/
 .build/
+bower_components/
+node_modules/
 nginx.pid
 *~
+.projectile
+.dir-locals.el
