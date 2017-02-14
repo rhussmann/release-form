@@ -4,16 +4,28 @@
   "description": "A form for ingesting signatures online.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "bower install signature_pad && cp bower_components/signature_pad/signature_pad.min.js public/script/"
+    "test": "mocha -u tdd src/test",
+    "setup": "bower install signature_pad && cp bower_components/signature_pad/signature_pad.min.js public/script/",
+    "start": "nodemon src/server.js",
+    "cucumber": "cucumber-js --format-options '{\"colorsEnabled\": false}' --format progress"
   },
   "author": "Ricky Hussmann",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "chromedriver": "^2.27.3",
+    "cucumber": "^2.0.0-rc.7",
+    "jsdom": "^9.10.0",
+    "mocha": "^3.2.0",
+    "selenium-webdriver": "^3.0.1"
   },
   "dependencies": {
-    "bower": "^1.8.0"
+    "bower": "^1.8.0",
+    "consolidate": "^0.14.5",
+    "express": "^4.14.1",
+    "mustache": "^2.3.0",
+    "nodemailer": "^3.0.2",
+    "nodemon": "^1.11.0",
+    "phantom": "^4.0.0"
   }
 }

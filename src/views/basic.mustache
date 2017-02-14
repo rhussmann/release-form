@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/form.css" rel="stylesheet">
+    <script type="text/javascript" src="script/signature_pad.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="script/form.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <form method="POST" action="/agree">
+          <div class="input-group">
+            <label for="first-name">Name</label>
+            <input type="text" id="first-name" class="form-control" name="first-name" placeholder="First" value="{{name.first}}"></input>
+            <input type="text" id="last-name" class="form-control" name="last-name" placeholder="Last" value="{{name.last}}"></input>
+          </div>
+          <div class="input-group">
+            <label>Address</label>
+            <input type="text" placeholder="Street Address" class="form-control" name="address-1" value="{{address.line1}}"></input>
+            <input type="text" placeholder="Street Address Line 2" class="form-control" name="address-2" value="{{address.line2}}"></input>
+            <input type="text" placeholder="City" class="form-control" name="city" value="{{address.city}}"></input>
+            <select class="form-control" id="state" name="state" value="{{address.state}}">
+              {{#states}}
+              <option value="{{abbr}}" {{selected}}>{{name}}</option>
+              {{/states}}
+            </select>
+            <input type="text" placeholder="ZIP" class="form-control" name="zip" value="{{address.zip}}"></input>
+          </div>
+          <div class="input-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" placeholder="Phone number" name="phone" value="{{contact.phone}}"></input>
+          </div>
+          <div class="input-group">
+            <label for="email-input">
+              Email</email>
+<input type="text" id="email-input" class="form-control" placeholder="email" name="email" value="{{contact.email}}"></input>
+</div>
+<div class="input-group">
+  <label>Once you view your boudoir gallery you will see that the images are
+    provocative but classy, tasteful, & do not cross over the line of nudity (on
+    Facebook). Please check all that apply with preference of your photo usage below. This is considered your print/publish release for Company to use your photos as specified below. If you don't mind that Company uses tastefully nude photos on its website ONLY please specify which photos in the "other" section on A.</label>
+  <label>A. Post any photos, I don't care. Just make me look good.</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="facebook-photos" {{#usage.any.facebook}}checked{{/usage.any.facebook}}>
+      Facebook
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="blog-photos" {{#usage.any.blog}}checked{{/usage.any.blog}}>
+      Blog
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="other-photos" {{#usage.any.other}}checked{{/usage.any.other}}>
+      Other
+    </label>
+  </div>
+  <input type="text" placeholder="Other" class="form-control"></input>
+  <label>B. You may post ambiguous body shots, no face, no tagging.</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="ambiguous-facebook" {{#facebook}}facebook{{/facebook}}>
+      Facebook
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="ambiguous-blog" {{#blog}}checked{{/blog}}>
+      Blog
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" name="ambiguous-other" {{#other}}checked{{/other}}>
+      Other
+    </label>
+  </div>
+  <input type="text" placeholder="Other" class="form-control" name="ambiguous-other-reason"></input>
+</div>
+<div class="input-group">
+  <label for="photo-list">Company may use the following images from my boudoir session ONLY: (please list specific image numbers below)</label>
+  <textarea class="form-control" id="photo-list" row="3"></textarea>
+</div>
+<div class="input-group">
+  <label>$250 up charge. **I do not wish for ANY of my photos to be released and/or used on ANY social media. *Typically reserved for government employees but please let me know if you prefer this over any other option listed above*</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" {{#nopub}}checked{{/nopub}}>
+      No publication at All!
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" {{#printOnly}}checked{{/printOnly}}>
+      No social publication (FB, blog, etc) but print (books) okay for studio use
+    </label>
+  </div>
+</div>
+<div class="input-group">
+  <label>May I use your photos for (check all that apply):</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" {{#advertising}}checked{{/advertising}}>
+      Advertising
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" {{#publication}}checked{{/publication}}>
+      Submit for online/print magazines or blogs
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="" {{#competition}}checked{{/competition}}>
+      Enter into Professional Competitions
+    </label>
+  </div>
+</div>
+<div class="input-group">
+  <div class="row">
+    <canvas id="canvas">
+    </canvas>
+  </div>
+  <input type="hidden" id="signature-text" name="signature-text"></input>
+  <div class="row">
+    <button type="button" id="clear-button" class="btn btn-default" onclick="SignatureController.clearSignatures()">
+      Clear
+    </button>
+    <button type="button" id="submit-button" class="btn btn-default" onclick="SignatureController.submit()">
+      Submit
+    </button>
+  </div>
+</div>
+</form>
+</div>
+</div>
+</body>
+</html>

@@ -7,3 +7,4 @@ nginx.pid
 *~
 .projectile
 .dir-locals.el
+npm-debug.log
