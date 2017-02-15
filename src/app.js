@@ -70,7 +70,7 @@ app.launch = (cb) => {
     Phantom = ph;
     app.myAppServer = app.listen(PORT, () => {
       console.log(`App listening on ${PORT}`);
-      cb();
+      (cb) ? cb() : null;
     });
   });
 };
