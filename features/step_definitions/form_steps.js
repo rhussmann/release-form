@@ -7,12 +7,20 @@ chai.should();
 
 const app = require('../../src/app');
 
-defineSupportCode(function({Given, When, Then}) {
-  Given('I am on the form webpage', function (callback) {
-    const driver = this.driver;;
+defineSupportCode(function({Given, When, Then, Before, After}) {
+  Before((scenarioResult, callback) => {
     app.launch(() => {
-      callback(null, driver.get('http://localhost:3000/'));
+      callback();
     });
+  });
+
+  After(() => {
+    app.terminate();
+  });
+
+  Given('I am on the form webpage', function () {
+    const driver = this.driver;
+    driver.get('http://localhost:3000/');
   });
 
   When('I enter my data and click {stringInDoubleQuotes}', function (buttonName) {
@@ -32,6 +40,7 @@ defineSupportCode(function({Given, When, Then}) {
       return element.getAttribute('type');
     }).then((typeValue) => {
       typeValue.should.equal('application/pdf');
+      app.terminate();
       callback();
     });
   });
