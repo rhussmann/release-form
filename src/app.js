@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const phantom = require('phantom');
 const States = require('./States');
+const tmp = require('tmp');
 
 const app = express();
 let Phantom = null;
@@ -14,6 +15,18 @@ app.use(express.static(staticFilePath));
 app.engine('mustache', cons.mustache);
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
+
+function generateTempFile() {
+  return new Promise((resolve, reject) => {
+    tmp.file((err, path, fd, cleanupCallback) => {
+      return (err) ? reject(err) : resolve({
+        path: path,
+        fd: fd,
+        cleanupCallback: cleanupCallback
+      });
+    });
+  });
+}
 
 app.post('/agree', (req, res) => {
   res.send('Hi there!');
@@ -37,8 +50,10 @@ app.get('/render', (req, res) => {
 
 app.get('/testing', (req, res) => {
   console.log('Received request');
-  const filename = 'agree.pdf';
+  const filename = null;
   let pageObject = null;
+  let cleanupCallback = null;
+
   res.header('Content-disposition', 'inline; filename=agreement.pdf');
   res.header('Content-type', 'application/pdf');
 
@@ -50,15 +65,27 @@ app.get('/testing', (req, res) => {
     return pageObject.property('paperSize', {width: '8.5in', height:'11in'});
   }).then((status) => {
       return pageObject.open('https://www.google.com');
-  }).then((status) => {
+  }).then(() => {
+    return generateTempFile();
+  }).then((tempFile) => {
     console.log('Fetched google');
+    cleanupCallback = tempFile.cleanupCallback;
+    filename = tempfile.path;
     return pageObject.render(filename);
   }).then(() => {
     console.log('Rendered to file');
-    fs.createReadStream(filename).pipe(res);
+    const readStream = fs.createReadStream(filename);
+    readStream.on('end', () => {
+      console.log(`Removing ${filename}`);
+      cleanupCallback();
+    });
+    readStream.pipe(res);
   }).catch((err) => {
     console.log('Error in the process', err);
     res.status(500).send('There was an error processing your request:' + err);
+
+    // Cleanup temp file if necessary
+    if (cleanupCallback) cleanupCallback();
   });
 });
 
@@ -77,6 +104,7 @@ app.launch = (cb) => {
 
 app.terminate = () => {
   app.myAppServer.close();
+  Phantom.exit();
 };
 
 module.exports = app;
