@@ -1,8 +1,15 @@
+const bodyParser = require('body-parser');
 const cons = require('consolidate');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const phantom = require('phantom');
+
+// TODO: Remove this if /render is removed
+// and it is not directly used
+const mustache = require('mustache');
+
+const request = require('request');
 const States = require('./States');
 const tmp = require('tmp');
 
@@ -10,7 +17,13 @@ const app = express();
 let Phantom = null;
 
 const staticFilePath = path.normalize(__dirname + '/../public/');
+const templatePath = path.normalize(__dirname + '/views/');
+const basicTemplate = fs.readFileSync(templatePath + 'basic.mustache', 'utf8');
+
 console.log(`Listening for static files at ${staticFilePath}`);
+console.log(`Template path is ${templatePath}`);
+
+app.use(bodyParser.json());
 app.use(express.static(staticFilePath));
 app.engine('mustache', cons.mustache);
 app.set('view engine', 'mustache');
@@ -30,6 +43,12 @@ function generateTempFile() {
 
 app.post('/agree', (req, res) => {
   res.send('Hi there!');
+});
+
+// TODO: Consider removing this endpoint if testSigantureRednering is
+// wrapped into testFormPopulation, and if it used nowhere else
+app.post('/render', (req, res) => {
+  res.send(mustache.render(basicTemplate, { signatureData: req.body.signatureData }));
 });
 
 app.get('/render', (req, res) => {

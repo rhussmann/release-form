@@ -12,14 +12,18 @@
   "author": "Ricky Hussmann",
   "license": "ISC",
   "devDependencies": {
+    "canvas": "^1.6.3",
     "chai": "^3.5.0",
     "chromedriver": "^2.27.3",
     "cucumber": "^2.0.0-rc.7",
     "jsdom": "^9.10.0",
     "mocha": "^3.2.0",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "selenium-webdriver": "^3.0.1"
   },
   "dependencies": {
+    "body-parser": "^1.16.1",
     "bower": "^1.8.0",
     "consolidate": "^0.14.5",
     "express": "^4.14.1",

@@ -23,10 +23,6 @@ function renderTemplate(html) {
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
         path.normalize(__dirname + '/../../public/script/form.js')
       ],
-      features: {
-        FetchExternalResources: ['script'],
-        ProcessExternalResources: ['script']
-      },
       done: (errors, window) => {
         return (errors) ? reject(errors) : resolve(window);
       }
