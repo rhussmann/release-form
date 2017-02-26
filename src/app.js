@@ -23,7 +23,21 @@ const basicTemplate = fs.readFileSync(templatePath + 'basic.mustache', 'utf8');
 console.log(`Listening for static files at ${staticFilePath}`);
 console.log(`Template path is ${templatePath}`);
 
+// LOGGING
+app.use((req, res, next) => {
+  let _end = res.end;
+  const that = this;
+
+  res.end = function() {
+    console.log(`${req.method} - ${req.path}`);
+    _end.apply(this, arguments);
+  }
+
+  next();
+});
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(staticFilePath));
 app.engine('mustache', cons.mustache);
 app.set('view engine', 'mustache');
@@ -45,14 +59,10 @@ app.get('/', (req, res) => {
   res.send(mustache.render(basicTemplate, {}));
 });
 
-app.post('/agree', (req, res) => {
-  res.send('Hi there!');
-});
-
 // TODO: Consider removing this endpoint if testSigantureRednering is
 // wrapped into testFormPopulation, and if it used nowhere else
 app.post('/render', (req, res) => {
-  res.send(mustache.render(basicTemplate, { signatureData: req.body.signatureData }));
+  res.send(mustache.render(basicTemplate, req.body));
 });
 
 app.get('/render', (req, res) => {
