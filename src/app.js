@@ -41,6 +41,10 @@ function generateTempFile() {
   });
 }
 
+app.get('/', (req, res) => {
+  res.send(mustache.render(basicTemplate, {}));
+});
+
 app.post('/agree', (req, res) => {
   res.send('Hi there!');
 });
