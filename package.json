@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -u tdd src/test",
     "setup": "bower install signature_pad && cp bower_components/signature_pad/signature_pad.min.js public/script/",
-    "start": "nodemon src/server.js",
+    "start": "nodemon -e js,json,mustache src/server.js",
     "cucumber": "cucumber-js --format-options '{\"colorsEnabled\": false}' --format progress"
   },
   "author": "Ricky Hussmann",
