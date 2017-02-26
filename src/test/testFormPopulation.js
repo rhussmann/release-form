@@ -74,27 +74,27 @@ suite('Boudoir agreement form population', () => {
       $('#last-name').prop('value')
         .should.equal(model.name.last);
 
-      $('input[name="address-1"]').val()
+      $('input[name="address[line1]"]').val()
         .should.equal(model.address.line1);
-      $('input[name="address-2"]').val()
+      $('input[name="address[line2]"]').val()
         .should.equal(model.address.line2);
-      $('input[name="city"]').val()
+      $('input[name="address[city]"]').val()
         .should.equal(model.address.city);
-      $('select[name="state"]').val()
+      $('select[name="address[state]"]').val()
         .should.equal(model.address.state);
-      $('input[name="zip"]').val()
+      $('input[name="address[zip]"]').val()
         .should.equal(model.address.zip);
 
-      $('input[name="phone"]').val()
+      $('input[name="contact[phone]"]').val()
         .should.equal(model.contact.phone);
-      $('input[name="email"]').val()
+      $('input[name="contact[email]"]').val()
         .should.equal(model.contact.email);
 
-      $('input[name="facebook-photos"]').prop('checked')
+      $('input[name="usage[any][facebook]"]').prop('checked')
         .should.equal(model.usage.any.facebook);
-      $('input[name="blog-photos"]').prop('checked')
+      $('input[name="usage[any][blog]"]').prop('checked')
         .should.equal(model.usage.any.blog);
-      $('input[name="other-photos"]').prop('checked')
+      $('input[name="usage[any][other]"]').prop('checked')
         .should.equal(model.usage.any.other);
 
       done();

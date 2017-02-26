@@ -7,36 +7,37 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="script/form.js"></script>
+    <title>Form</title>
   </head>
   <body>
     <div class="container">
       <div class="row">
-        <form method="POST" action="/agree">
+        <form method="POST" action="/render">
           <div class="input-group">
             <label for="first-name">Name</label>
-            <input type="text" id="first-name" class="form-control" name="first-name" placeholder="First" value="{{name.first}}"></input>
-            <input type="text" id="last-name" class="form-control" name="last-name" placeholder="Last" value="{{name.last}}"></input>
+            <input type="text" id="first-name" class="form-control" name="name[first]" placeholder="First" value="{{name.first}}">
+            <input type="text" id="last-name" class="form-control" name="name[last]" placeholder="Last" value="{{name.last}}">
           </div>
           <div class="input-group">
             <label>Address</label>
-            <input type="text" placeholder="Street Address" class="form-control" name="address-1" value="{{address.line1}}"></input>
-            <input type="text" placeholder="Street Address Line 2" class="form-control" name="address-2" value="{{address.line2}}"></input>
-            <input type="text" placeholder="City" class="form-control" name="city" value="{{address.city}}"></input>
-            <select class="form-control" id="state" name="state" value="{{address.state}}">
+            <input type="text" placeholder="Street Address" class="form-control" name="address[line1]" value="{{address.line1}}">
+            <input type="text" placeholder="Street Address Line 2" class="form-control" name="address[line2]" value="{{address.line2}}">
+            <input type="text" placeholder="City" class="form-control" name="address[city]" value="{{address.city}}">
+            <select class="form-control" id="state" name="address[state]" value="{{address.state}}">
               {{#states}}
               <option value="{{abbr}}" {{selected}}>{{name}}</option>
               {{/states}}
             </select>
-            <input type="text" placeholder="ZIP" class="form-control" name="zip" value="{{address.zip}}"></input>
+            <input type="text" placeholder="ZIP" class="form-control" name="address[zip]" value="{{address.zip}}">
           </div>
           <div class="input-group">
             <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" placeholder="Phone number" name="phone" value="{{contact.phone}}"></input>
+            <input type="text" class="form-control" id="phone" placeholder="Phone number" name="contact[phone]" value="{{contact.phone}}">
           </div>
           <div class="input-group">
             <label for="email-input">
-              Email</email>
-<input type="text" id="email-input" class="form-control" placeholder="email" name="email" value="{{contact.email}}"></input>
+              Email</label>
+<input type="text" id="email-input" class="form-control" placeholder="email" name="contact[email]" value="{{contact.email}}">
 </div>
 <div class="input-group">
   <label>Once you view your boudoir gallery you will see that the images are
@@ -45,59 +46,59 @@
   <label>A. Post any photos, I don't care. Just make me look good.</label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="facebook-photos" {{#usage.any.facebook}}checked{{/usage.any.facebook}}>
+      <input type="checkbox" name="usage[any][facebook]" {{#usage.any.facebook}}checked{{/usage.any.facebook}}>
       Facebook
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="blog-photos" {{#usage.any.blog}}checked{{/usage.any.blog}}>
+      <input type="checkbox" name="usage[any][blog]" {{#usage.any.blog}}checked{{/usage.any.blog}}>
       Blog
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="other-photos" {{#usage.any.other}}checked{{/usage.any.other}}>
+      <input type="checkbox" name="usage[any][other]" {{#usage.any.other}}checked{{/usage.any.other}}>
       Other
     </label>
   </div>
-  <input type="text" placeholder="Other" class="form-control"></input>
+  <input type="text" placeholder="Other" class="form-control">
   <label>B. You may post ambiguous body shots, no face, no tagging.</label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="ambiguous-facebook" {{#facebook}}facebook{{/facebook}}>
+      <input type="checkbox" name="usage[ambiguous][facebook]" {{#usage.ambiguous.facebook}}checked{{/usage.ambiguous.facebook}}>
       Facebook
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="ambiguous-blog" {{#blog}}checked{{/blog}}>
+      <input type="checkbox" name="usage[ambiguous][blog]" {{#usage.ambiguous.blog}}checked{{/usage.ambiguous.blog}}>
       Blog
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" name="ambiguous-other" {{#other}}checked{{/other}}>
+      <input type="checkbox" name="usage[ambiguous][other]" {{#usage.ambiguous.other}}checked{{/usage.ambiguous.other}}>
       Other
     </label>
   </div>
-  <input type="text" placeholder="Other" class="form-control" name="ambiguous-other-reason"></input>
+  <input type="text" placeholder="Other" class="form-control" name="ambiguousOtherReason" value="{{ambiguousOtherReason}}">
 </div>
 <div class="input-group">
   <label for="photo-list">Company may use the following images from my boudoir session ONLY: (please list specific image numbers below)</label>
-  <textarea class="form-control" id="photo-list" row="3"></textarea>
+  <textarea class="form-control" id="photo-list"></textarea>
 </div>
 <div class="input-group">
   <label>$250 up charge. **I do not wish for ANY of my photos to be released and/or used on ANY social media. *Typically reserved for government employees but please let me know if you prefer this over any other option listed above*</label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" {{#nopub}}checked{{/nopub}}>
+      <input type="checkbox" name="usage[publication][none]" {{#usage.publication.none}}checked{{/usage.publication.none}}>
       No publication at All!
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" {{#printOnly}}checked{{/printOnly}}>
+      <input type="checkbox" name="usage[publication][printOnly]" {{#usage.publication.printOnly}}checked{{/usage.publication.printOnly}}>
       No social publication (FB, blog, etc) but print (books) okay for studio use
     </label>
   </div>
@@ -106,19 +107,19 @@
   <label>May I use your photos for (check all that apply):</label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" {{#advertising}}checked{{/advertising}}>
+      <input type="checkbox" name="usage[promotion][advertising]" {{#usage.promotion.advertising}}checked{{/usage.promotion.advertising}}>
       Advertising
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" {{#publication}}checked{{/publication}}>
+      <input type="checkbox" name="usage[promotion][publication]" {{#usage.promotion.publication}}checked{{/usage.promotion.publication}}>
       Submit for online/print magazines or blogs
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" value="" {{#competition}}checked{{/competition}}>
+      <input type="checkbox" name="usage[promotion][competitions]" {{#usage.promotion.competitions}}checked{{/usage.promotion.competitions}}>
       Enter into Professional Competitions
     </label>
   </div>
@@ -128,7 +129,7 @@
     <canvas id="canvas">
     </canvas>
   </div>
-  <input type="hidden" id="signature-text" name="signature-text" value="{{signatureData}}"></input>
+  <input type="hidden" id="signature-text" name="signatureData" value="{{signatureData}}">
   <div class="row">
     <button type="button" id="clear-button" class="btn btn-default" onclick="SignatureController.clearSignatures()">
       Clear
