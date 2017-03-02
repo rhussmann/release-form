@@ -11,8 +11,8 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
-        <form method="POST" action="/render">
+      <!--div class="row"-->
+        <form method="POST" action="/target">
           <div class="input-group">
             <label for="first-name">Name</label>
             <input type="text" id="first-name" class="form-control" name="name[first]" placeholder="First" value="{{name.first}}">
@@ -25,7 +25,7 @@
             <input type="text" placeholder="City" class="form-control" name="address[city]" value="{{address.city}}">
             <select class="form-control" id="state" name="address[state]" value="{{address.state}}">
               {{#states}}
-              <option value="{{abbr}}" {{selected}}>{{name}}</option>
+              <option value="{{abbr}}" {{#selected}}selected{{/selected}}>{{name}}</option>
               {{/states}}
             </select>
             <input type="text" placeholder="ZIP" class="form-control" name="address[zip]" value="{{address.zip}}">
@@ -140,7 +140,7 @@
   </div>
 </div>
 </form>
-</div>
+<!--/div-->
 </div>
 </body>
 </html>

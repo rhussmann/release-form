@@ -2,6 +2,8 @@ const bodyParser = require('body-parser');
 const cons = require('consolidate');
 const express = require('express');
 const fs = require('fs');
+const logger = require('winston');
+const net = require('net');
 const path = require('path');
 const phantom = require('phantom');
 
@@ -9,7 +11,6 @@ const phantom = require('phantom');
 // and it is not directly used
 const mustache = require('mustache');
 
-const request = require('request');
 const States = require('./States');
 const tmp = require('tmp');
 
@@ -20,8 +21,8 @@ const staticFilePath = path.normalize(__dirname + '/../public/');
 const templatePath = path.normalize(__dirname + '/views/');
 const basicTemplate = fs.readFileSync(templatePath + 'basic.mustache', 'utf8');
 
-console.log(`Listening for static files at ${staticFilePath}`);
-console.log(`Template path is ${templatePath}`);
+logger.debug(`Listening for static files at ${staticFilePath}`);
+logger.debug(`Template path is ${templatePath}`);
 
 // LOGGING
 app.use((req, res, next) => {
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
   const that = this;
 
   res.end = function() {
-    console.log(`${req.method} - ${req.path}`);
+    logger.info(`${req.method} - ${req.path}`);
     _end.apply(this, arguments);
   }
 
@@ -45,7 +46,7 @@ app.set('views', __dirname + '/views');
 
 function generateTempFile() {
   return new Promise((resolve, reject) => {
-    tmp.file((err, path, fd, cleanupCallback) => {
+    tmp.file({postfix: '.pdf'}, (err, path, fd, cleanupCallback) => {
       return (err) ? reject(err) : resolve({
         path: path,
         fd: fd,
@@ -56,34 +57,11 @@ function generateTempFile() {
 }
 
 app.get('/', (req, res) => {
-  res.send(mustache.render(basicTemplate, {}));
+  res.send(mustache.render(basicTemplate, {states: JSON.parse(States.states())}));
 });
 
-// TODO: Consider removing this endpoint if testSigantureRednering is
-// wrapped into testFormPopulation, and if it used nowhere else
-app.post('/render', (req, res) => {
-  res.send(mustache.render(basicTemplate, req.body));
-});
-
-app.get('/render', (req, res) => {
-  res.render('basic', {
-    name: {
-      first: 'Ricky',
-      last: 'Hussmann'
-    },
-    address: {
-      line1: 'Line 1',
-      line2: 'Line 2',
-      city: 'Morgantown',
-      zip: '26501'
-    },
-    states: JSON.parse(States.states())
-  });
-});
-
-app.get('/testing', (req, res) => {
-  console.log('Received request');
-  const filename = null;
+app.post('/target', (req, res) => {
+  let filename = null;
   let pageObject = null;
   let cleanupCallback = null;
 
@@ -91,30 +69,33 @@ app.get('/testing', (req, res) => {
   res.header('Content-type', 'application/pdf');
 
   Phantom.createPage().then((page) => {
-    console.log('Created page');
     pageObject = page;
     return page.property('viewportSize', {width:1280, height:1024});
   }).then((status) => {
     return pageObject.property('paperSize', {width: '8.5in', height:'11in'});
-  }).then((status) => {
-      return pageObject.open('https://www.google.com');
+  }).then(() => {
+    return pageObject.open('http://localhost:3000/render', {
+      operation: "POST",
+      encoding: "utf8",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: JSON.stringify(req.body)
+    });
   }).then(() => {
     return generateTempFile();
   }).then((tempFile) => {
-    console.log('Fetched google');
     cleanupCallback = tempFile.cleanupCallback;
-    filename = tempfile.path;
+    filename = tempFile.path;
     return pageObject.render(filename);
   }).then(() => {
-    console.log('Rendered to file');
     const readStream = fs.createReadStream(filename);
     readStream.on('end', () => {
-      console.log(`Removing ${filename}`);
-      cleanupCallback();
+      if (cleanupCallback) cleanupCallback();
     });
     readStream.pipe(res);
   }).catch((err) => {
-    console.log('Error in the process', err);
+    logger.error('Error in the process', err);
     res.status(500).send('There was an error processing your request:' + err);
 
     // Cleanup temp file if necessary
@@ -122,15 +103,50 @@ app.get('/testing', (req, res) => {
   });
 });
 
+app.post('/render', (req, res) => {
+  const states = JSON.parse(States.states());
+  if (req.body && req.body.address && req.body.address.state) {
+    const selectedState = states.filter((s) => s.abbr === req.body.address.state);
+    if (selectedState.length) {
+      selectedState[0].selected = true;
+    }
+  }
 
-app.launch = (cb) => {
-  const PORT = 3000;
-  console.log('Starting a phantom process');
+  req.body.states = states;
+  res.send(mustache.render(basicTemplate, req.body));
+});
+
+app.launchOnRandomPort = (cb) => {
+  var portrange = 45032;
+
+  function getPort (cb) {
+    var port = portrange;
+    portrange += 1;
+
+    var server = net.createServer()
+    server.listen(port, function (err) {
+      server.once('close', function () {
+        cb(port);
+      })
+      server.close();
+    });
+    server.on('error', function (err) {
+      getPort(cb);
+    });
+  }
+
+  getPort((port) => {
+    app.launch(port, cb);
+  });
+};
+
+app.launch = (port, cb) => {
+  const PORT = (typeof port === 'number') ? port : 3000;
   phantom.create().then((ph) => {
     Phantom = ph;
     app.myAppServer = app.listen(PORT, () => {
-      console.log(`App listening on ${PORT}`);
-      (cb) ? cb() : null;
+      logger.info(`App listening on ${PORT}`);
+      (cb) ? cb(port) : null;
     });
   });
 };
