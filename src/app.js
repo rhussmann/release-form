@@ -70,9 +70,11 @@ app.post('/target', (req, res) => {
 
   Phantom.createPage().then((page) => {
     pageObject = page;
-    return page.property('viewportSize', {width:1280, height:1024});
-  }).then((status) => {
-    return pageObject.property('paperSize', {width: '8.5in', height:'11in'});
+    return pageObject.property('paperSize', {
+      format: 'Letter',
+      orientation: 'portrait',
+      margin: '0.5in'
+    });
   }).then(() => {
     return pageObject.open('http://localhost:3000/render', {
       operation: "POST",

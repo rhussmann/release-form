@@ -40,10 +40,11 @@
 <input type="text" id="email-input" class="form-control" placeholder="email" name="contact[email]" value="{{contact.email}}">
 </div>
 <div class="input-group">
-  <label>Once you view your boudoir gallery you will see that the images are
+  <label>Now that you've seen your boudoir photos let's chat about using your gorgeous images online. I primarily post images that are on the PG-rated side. You look amazing in these photos, and I would love to share them with the world. You will never be named or tagged. So, what do you think?</label>
+  <!--label>Once you view your boudoir gallery you will see that the images are
     provocative but classy, tasteful, & do not cross over the line of nudity (on
-    Facebook). Please check all that apply with preference of your photo usage below. This is considered your print/publish release for Company to use your photos as specified below. If you don't mind that Company uses tastefully nude photos on its website ONLY please specify which photos in the "other" section on A.</label>
-  <label>A. Post any photos, I don't care. Just make me look good.</label>
+    Facebook). Please check all that apply with preference of your photo usage below. This is considered your print/publish release for Company to use your photos as specified below. If you don't mind that Company uses tastefully nude photos on its website ONLY please specify which photos in the "other" section on A.</label-->
+  <label>A. Post any photos! Just make me look good!</label>
   <div class="checkbox">
     <label>
       <input type="checkbox" name="usage[any][facebook]" {{#usage.any.facebook}}checked{{/usage.any.facebook}}>
@@ -58,12 +59,24 @@
   </div>
   <div class="checkbox">
     <label>
+      <input type="checkbox" name="usage[any][instagram]" {{#usage.any.instagram}}checked{{/usage.any.instagram}}>
+      Instagram
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="usage[any][pinterest]" {{#usage.any.pinterest}}checked{{/usage.any.pinterest}}>
+      Pinterest
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
       <input type="checkbox" name="usage[any][other]" {{#usage.any.other}}checked{{/usage.any.other}}>
       Other
     </label>
   </div>
   <input type="text" placeholder="Other" class="form-control">
-  <label>B. You may post ambiguous body shots, no face, no tagging.</label>
+  <label>B. You may post anonymous body shots, no face, please.</label>
   <div class="checkbox">
     <label>
       <input type="checkbox" name="usage[ambiguous][facebook]" {{#usage.ambiguous.facebook}}checked{{/usage.ambiguous.facebook}}>
@@ -74,6 +87,18 @@
     <label>
       <input type="checkbox" name="usage[ambiguous][blog]" {{#usage.ambiguous.blog}}checked{{/usage.ambiguous.blog}}>
       Blog
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="usage[ambiguous][instagram]" {{#usage.ambiguous.instagram}}checked{{/usage.ambiguous.instagram}}>
+      Instagram
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="usage[ambiguous][pinterest]" {{#usage.ambiguous.pinterest}}checked{{/usage.ambiguous.pinterest}}>
+      Pinterest
     </label>
   </div>
   <div class="checkbox">
@@ -89,7 +114,7 @@
   <textarea class="form-control" id="photo-list"></textarea>
 </div>
 <div class="input-group">
-  <label>$250 up charge. **I do not wish for ANY of my photos to be released and/or used on ANY social media. *Typically reserved for government employees but please let me know if you prefer this over any other option listed above*</label>
+  <label>**I do not wish for ANY of my photos to be released and/or used on ANY social media. *Typically reserved for government employees but please let me know if you prefer this over any other option listed above*</label>
   <div class="checkbox">
     <label>
       <input type="checkbox" name="usage[publication][none]" {{#usage.publication.none}}checked{{/usage.publication.none}}>
@@ -125,6 +150,11 @@
   </div>
 </div>
 <div class="input-group">
+  <label for="experience">We are so glad that you chose As You Are for your boudoir photos! Boudoir photography is a magical and intimate thing, and we appreciate your trust. We enjoyed getting to know you and learning a little about your story. We'd love to share a bit of your story and boudoir experience on the blog. We do this in the hopes of encouraging women who are hesitant to take that first step. Please share anything you would be okay with us including in a blog post that you think would inspire other ladies to give themselves the gift of boudoir. Thank you so much!</label>
+  <textarea class="form-control" id="experience" placeholder="Share your experience here..."></textarea>
+</div>
+<div class="input-group">
+  <label>Please sign below. On a computer, click-and-drag within the box below. On a mobile phone or tablet, draw your signature in the box below with your finger.</label>
   <div class="row">
     <canvas id="canvas">
     </canvas>
