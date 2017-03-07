@@ -25,10 +25,11 @@
   "dependencies": {
     "body-parser": "^1.16.1",
     "bower": "^1.8.0",
+    "chai-as-promised": "^6.0.0",
     "consolidate": "^0.14.5",
     "express": "^4.14.1",
     "mustache": "^2.3.0",
-    "nodemailer": "^3.0.2",
+    "nodemailer": "^3.1.4",
     "nodemon": "^1.11.0",
     "phantom": "^4.0.0",
     "tmp": "0.0.31",
