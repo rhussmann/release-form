@@ -10,3 +10,4 @@ nginx.pid
 npm-debug.log
 
 config/mailer-test-config.js
+config/mailer-config.js
