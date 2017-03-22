@@ -30,12 +30,12 @@ suite('The form webapp', () => {
     });
   }).timeout(5000);
 
-  before((done) => {
+  setup((done) => {
     app.launchOnRandomPort((appPort) => {
       port = appPort;
       done();
     });
   });
 
-  after(() => { app.terminate(); });
+  teardown(() => { app.terminate(); });
 });

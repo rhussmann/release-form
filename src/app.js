@@ -6,13 +6,19 @@ const logger = require('winston');
 const net = require('net');
 const path = require('path');
 const phantom = require('phantom');
+const tmp = require('tmp');
 
 // TODO: Remove this if /render is removed
 // and it is not directly used
 const mustache = require('mustache');
 
 const States = require('./States');
-const tmp = require('tmp');
+const Mailer = require('./mailer');
+const mailerConfig = require('../config/mailer-config');
+const mailer = new Mailer({
+  user: mailerConfig.username,
+  pass: mailerConfig.password
+});
 
 const app = express();
 let Phantom = null;
@@ -46,7 +52,7 @@ app.set('views', __dirname + '/views');
 
 function generateTempFile() {
   return new Promise((resolve, reject) => {
-    tmp.file({postfix: '.pdf'}, (err, path, fd, cleanupCallback) => {
+    tmp.file({postfix: '.pdf', keep: true}, (err, path, fd, cleanupCallback) => {
       return (err) ? reject(err) : resolve({
         path: path,
         fd: fd,
@@ -92,10 +98,24 @@ app.post('/target', (req, res) => {
     return pageObject.render(filename);
   }).then(() => {
     const readStream = fs.createReadStream(filename);
-    readStream.on('end', () => {
-      if (cleanupCallback) cleanupCallback();
-    });
     readStream.pipe(res);
+  }).then(() => {
+    const message = {
+      to: 'ricky.hussmann@gmail.com',
+      subject: 'agreement',
+      message: 'this is the agreement',
+      attachments: [{
+        filename: 'agreement.pdf',
+        path: filename
+      }]
+    };
+    return mailer.sendMessage(message);
+  }).then(() => {
+    // TODO: Should extract cleanup to a function that checks for the existence of
+    // the file and the cleanup callback
+    if (cleanupCallback) {
+      cleanupCallback();
+    }
   }).catch((err) => {
     logger.error('Error in the process', err);
     res.status(500).send('There was an error processing your request:' + err);

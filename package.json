@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha -u tdd src/test",
+    "integration-test": "mocha -u tdd src/test/integration",
+    "test-watch": "mocha --ui tdd --no-colors --reporter min --watch src/test",
     "setup": "bower install signature_pad && cp bower_components/signature_pad/signature_pad.min.js public/script/",
     "start": "nodemon -e js,json,mustache src/server.js",
     "cucumber": "cucumber-js --format-options '{\"colorsEnabled\": false}' --format progress"
@@ -25,10 +27,11 @@
   "dependencies": {
     "body-parser": "^1.16.1",
     "bower": "^1.8.0",
+    "chai-as-promised": "^6.0.0",
     "consolidate": "^0.14.5",
     "express": "^4.14.1",
     "mustache": "^2.3.0",
-    "nodemailer": "^3.0.2",
+    "nodemailer": "^3.1.4",
     "nodemon": "^1.11.0",
     "phantom": "^4.0.0",
     "tmp": "0.0.31",

@@ -31,14 +31,14 @@ function renderHTML(html) {
 
 suite('Rendering of boudoir form', () => {
   let port;
-  before((done) => {
+  setup((done) => {
     app.launchOnRandomPort((appPort) => {
       port = appPort;
       done();
     });
   });
 
-  after(() => {
+  teardown(() => {
     app.terminate();
   });
 

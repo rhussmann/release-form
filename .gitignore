@@ -8,3 +8,6 @@ nginx.pid
 .projectile
 .dir-locals.el
 npm-debug.log
+
+config/mailer-test-config.js
+config/mailer-config.js
