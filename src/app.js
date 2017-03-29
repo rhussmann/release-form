@@ -101,7 +101,7 @@ app.post('/target', (req, res) => {
     readStream.pipe(res);
   }).then(() => {
     const message = {
-      to: 'ricky.hussmann@gmail.com',
+      to: mailerConfig.recipient,
       subject: 'agreement',
       message: 'this is the agreement',
       attachments: [{
