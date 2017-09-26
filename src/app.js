@@ -22,6 +22,7 @@ const mailer = new Mailer({
 
 const app = express();
 let Phantom = null;
+let app_port = null;
 
 const staticFilePath = path.normalize(__dirname + '/../public/');
 const templatePath = path.normalize(__dirname + '/views/');
@@ -82,7 +83,7 @@ app.post('/target', (req, res) => {
       margin: '0.5in'
     });
   }).then(() => {
-    return pageObject.open('http://localhost:3000/render', {
+    return pageObject.open(`http://localhost:${app_port}/render`, {
       operation: "POST",
       encoding: "utf8",
       headers: {
@@ -163,12 +164,12 @@ app.launchOnRandomPort = (cb) => {
 };
 
 app.launch = (port, cb) => {
-  const PORT = (typeof port === 'number') ? port : 3000;
+  app_port = (typeof port === 'number') ? port : 3000;
   phantom.create().then((ph) => {
     Phantom = ph;
-    app.myAppServer = app.listen(PORT, () => {
-      logger.info(`App listening on ${PORT}`);
-      (cb) ? cb(port) : null;
+    app.myAppServer = app.listen(app_port, () => {
+      logger.info(`App listening on ${app_port}`);
+      (cb) ? cb(app_port) : null;
     });
   });
 };
