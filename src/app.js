@@ -6,6 +6,7 @@ const logger = require('winston');
 const net = require('net');
 const path = require('path');
 const phantom = require('phantom');
+const rp = require('request-promise');
 const tmp = require('tmp');
 
 // TODO: Remove this if /render is removed
@@ -15,6 +16,7 @@ const mustache = require('mustache');
 const States = require('./States');
 const Mailer = require('./mailer');
 const mailerConfig = require('../config/mailer-config');
+const config = require('../config/config');
 const mailer = new Mailer({
   user: mailerConfig.username,
   pass: mailerConfig.password
@@ -24,12 +26,11 @@ const app = express();
 let Phantom = null;
 let app_port = null;
 
-const staticFilePath = path.normalize(__dirname + '/../public/');
-const templatePath = path.normalize(__dirname + '/views/');
-const basicTemplate = fs.readFileSync(templatePath + 'basic.mustache', 'utf8');
+function generateTemplatePromise() {
+  return rp(config.templateUrl);
+}
 
-logger.debug(`Listening for static files at ${staticFilePath}`);
-logger.debug(`Template path is ${templatePath}`);
+let templatePromise = generateTemplatePromise();
 
 // LOGGING
 app.use((req, res, next) => {
@@ -46,7 +47,6 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(staticFilePath));
 app.engine('mustache', cons.mustache);
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
@@ -64,10 +64,18 @@ function generateTempFile() {
 }
 
 app.get('/', (req, res) => {
-  res.send(mustache.render(basicTemplate, {states: JSON.parse(States.states())}));
+  templatePromise.then((templateString) => {
+    res.send(mustache.render(templateString, {states: JSON.parse(States.states())}));
+  });
 });
 
-app.post('/target', (req, res) => {
+app.post('/api/refresh', (req, res) => {
+  console.log('Refreshing template promise');
+  templatePromise = generateTemplatePromise();
+  res.sendStatus(200);
+});
+
+app.post('/api/target', (req, res) => {
   let filename = null;
   let pageObject = null;
   let cleanupCallback = null;
@@ -83,7 +91,7 @@ app.post('/target', (req, res) => {
       margin: '0.5in'
     });
   }).then(() => {
-    return pageObject.open(`http://localhost:${app_port}/render`, {
+    return pageObject.open(config.renderUrl, {
       operation: "POST",
       encoding: "utf8",
       headers: {
@@ -136,7 +144,9 @@ app.post('/render', (req, res) => {
   }
 
   req.body.states = states;
-  res.send(mustache.render(basicTemplate, req.body));
+  templatePromise.then((templateString) => {
+    res.send(mustache.render(templateString, req.body));
+  });
 });
 
 app.launchOnRandomPort = (cb) => {

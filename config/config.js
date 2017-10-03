@@ -1,3 +1,6 @@
-module.exports = {
-  templateUrl: process.env.TEMPLATE_URL || "http://form.asyouareboudoir.com.s3-website-us-east-1.amazonaws.com/basic.mustache"
-};
+const environment = (process.env.NODE_ENV) ?
+      process.env.NODE_ENV.trim().toLowerCase() :
+      'dev';
+
+console.log(`Loading ${environment} config...`);
+module.exports = require(`./${environment}`);
