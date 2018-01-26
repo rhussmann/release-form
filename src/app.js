@@ -111,8 +111,8 @@ app.post('/api/target', (req, res) => {
   }).then(() => {
     const message = {
       to: mailerConfig.recipient,
-      subject: 'agreement',
-      message: 'this is the agreement',
+      subject: `${req.body.name.first || "<first>"} ${req.body.name.last || "<last>"} - Release`,
+      message: 'This is the model release',
       attachments: [{
         filename: 'agreement.pdf',
         path: filename
