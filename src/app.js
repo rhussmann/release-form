@@ -27,7 +27,7 @@ let Phantom = null;
 let app_port = null;
 
 const TOTAL_ATTEMPTS = 4;
-const DELAY_IN_S = 15;
+const DELAY_IN_S = 60;
 let retriesLeft = TOTAL_ATTEMPTS;
 function generateTemplatePromise() {
   return new Promise((resolve, reject) => {
