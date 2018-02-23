@@ -32,8 +32,10 @@ let retriesLeft = TOTAL_ATTEMPTS;
 function generateTemplatePromise() {
   return new Promise((resolve, reject) => {
     rp(config.templateUrl)
-      .then(resolve)
-      .catch((e) => {
+      .then((data) => {
+        console.log("Template fetched successfully!");
+        resolve(data);
+      }).catch((e) => {
         retriesLeft -= 1;
         console.log(`Error fetching template, ${retriesLeft} retries left`);
         if (retriesLeft < 1) {
