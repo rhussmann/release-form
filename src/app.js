@@ -26,10 +26,30 @@ const app = express();
 let Phantom = null;
 let app_port = null;
 
+const TOTAL_ATTEMPTS = 4;
+const DELAY_IN_S = 15;
+let retriesLeft = TOTAL_ATTEMPTS;
 function generateTemplatePromise() {
-  return rp(config.templateUrl);
+  return new Promise((resolve, reject) => {
+    rp(config.templateUrl)
+      .then(resolve)
+      .catch((e) => {
+        retriesLeft -= 1;
+        console.log(`Error fetching template, ${retriesLeft} retries left`);
+        if (retriesLeft < 1) {
+          throw e;
+        }
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, DELAY_IN_S * 1000);
+        }).then(generateTemplatePromise);
+      });
+  });
 }
 
+console.log("Attempting to fetch template.");
 let templatePromise = generateTemplatePromise();
 
 // LOGGING
